@@ -1,0 +1,73 @@
+ @* <link rel="stylesheet" href="~/lib/FontAwesome/all.min.css">
+<script src="~/lib/FontAwesome/all.min.js"></script> *@
+
+
+<template id="categoryOptionTemplate">
+  <option value=""></option>
+</template>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="addProdModal" tabindex="-1"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create Product</h5>
+        <button type="button" class="btn btn-danger close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"></span>
+          <i class="fa-solid fa-circle-xmark" style="color: #f7f1f1;"></i>
+        </button>
+      </div>
+      <div class="modal-body createContent">
+          <form id="addProdForm">
+            <div class="form-group">
+                <label name="" class="control-label">Category</label>
+                <select id="catSelect" name="Category" class="form-select"></select>
+            </div>
+            <div class="form-group">
+                <label name="" class="control-label">Name</label>
+                <input name="Name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label name="" class="control-label">Units</label>
+                <input name="Units" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label name="" class="control-label">Stocks</label>
+                <input type="number" name="Stock" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label name="" class="control-label">Price</label>
+                <input name="Price" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label name="Status" class="control-label">Status</label>
+                <br>
+                <center>
+                <input  name="Status" class="form-check-input stat" type="checkbox" value="Active" id="flexCheckChecked"/>
+                <label class="form-check-label" for="flexCheckChecked">Active</label>
+                </center>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        @* <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa-solid fa-circle-xmark" style="color: #ed0707;"></i></button> *@
+        <button type="button" class="btn btn-success" id="saveProdBtn">Create</button>
+         @* <i class="fa-solid fa-cart-plus"></i>&nbsp;&nbsp;&nbsp; *@
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .modal-footer{
+     width: 200px;
+  margin: auto;
+  }
+  #saveProdBtn{
+  width: 300px;
+  
+ }
+</style>
+

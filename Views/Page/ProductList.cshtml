@@ -1,0 +1,171 @@
+@* 
+ <link rel="stylesheet" href="~/lib/FontAwesome/all.min.css">
+<script src="~/lib/FontAwesome/all.min.js"></script>
+<link rel="stylesheet" href="~/css/product.css">
+<script src="~/lib/jquery/dist/jquery.js"></script> *@
+
+
+
+
+<div class="unimaro"></div>
+
+
+
+@Html.Partial("ProductCartDisplay/ProductCard")
+
+@Html.Partial("ProductCartDisplay/ModalAddCart")
+
+
+
+<div class="d-flex flexwrap justify-content-evenly contents"></div>
+
+
+
+<script>
+    var selectedProdId;
+    var selectedProd;
+    var selectedHistory;
+    
+    var cartPrice;
+    var cQuantity;
+    var quants;
+    var mTotal;
+    var cartArr = [];
+    var holdOrderArr = [];
+    var orderArr = [];
+
+    var sTotal;
+    var oldProductStock;
+
+    var discountVal;
+    var discountTot;
+    var orderDeduct;
+    var orderTot;
+    var paymentVal;
+    var sukli;
+
+    var orderID;
+    
+    var selectedStockId;
+    var selectedStock;
+  
+
+ $(document).ready(function()
+ {
+   populateIndex();
+   populateCart();
+
+    var productList = {};
+    //pagpa dislpay sa data
+    
+    function populateIndex()
+    {
+
+    $.ajax("../api/newapi/getAllProduct")
+    .done(function(result)
+    {
+      productList = result;
+        result.forEach(function(item)
+        {
+            var template = document.querySelector("template#card-container");
+            var parent = document.querySelector(".parent");
+            var cloned = template.content.cloneNode(true);
+         
+      
+
+            cloned.querySelector(".card .card-title").innerHTML = item.name;
+            cloned.querySelector(".card .card-subtitle").innerHTML = "Category Name : " + item.categoryName;
+            cloned.querySelector(".card .card-units").innerHTML = "Units: " + item.units;
+            cloned.querySelector(".card .card-stock").innerHTML = "Stock : " + item.stock;
+            cloned.querySelector(".card .card-price").innerHTML = "Price : ₱" + item.price;
+             
+            
+          
+
+        
+            cloned.querySelector(".addCart").setAttribute("data-prodId", item.id);
+
+            parent.prepend(cloned);
+         
+       });
+    });
+    } //end of function populate
+
+
+   $(".parent").delegate(".addCart", "click", function(e){
+      var i = e.target.closest("a").getAttribute("data-prodId");
+     
+      if(i != null)
+      {
+
+  
+        selectedProdId = i;
+        selectedProd = productList.find(element => element.id == i);
+
+        $("#modalAddCart").modal("toggle");
+
+          $(".cardInfo .info-title").html('<center>' + selectedProd.name + '</center><br>');
+          $(".cardInfo .info-Stocks").html('Current Stocks : ' + selectedProd.stock);
+          $(".cardInfo .info-Price").html('Price : ' + selectedProd.price);
+           
+
+          cQuantity = selectedProd.stock;
+          cartPrice = selectedProd.price;
+      }else{
+         
+      }
+    }); //end of this function
+
+    
+    $("#addCart").on("input", function(){
+    
+      quants = $(this).val();   //take note of this
+    
+  console.log(quants);
+      if(cQuantity >= quants)
+      {
+        $(".cardInfo .info-mockTotal").html('Mock Total : ₱' + quants * cartPrice);
+      
+      }
+      else
+      {
+        document.getElementById("addCart").value = cQuantity;
+        quants = $(this).val(); 
+        
+        $(".cardInfo .info-mockTotal").html('Mock Total : ₱' + quants * cartPrice);
+        //alert("Must not go over the stocks available");
+       
+      }
+
+      mTotal = quants * cartPrice;
+    }); //end of this function
+
+     
+     $("#modalAddCartClose").click(function(){
+      $("#addCartForm")[0].reset();
+      cartPrice = 0;
+      quants = 0;
+      //console.log(cartPrice);
+      $(".cardInfo .info-mockTotal").html('Mock Total : ₱0');
+    }); //end of this function
+
+   
+   function populateCart(){
+    $.ajax("../api/newapi/datacart")
+    .done(function(item)
+    {
+     Cartarr = item;
+    });
+   }//end of function
+
+   
+});
+
+
+</script>
+<style>
+    .unimaro{
+  margin-bottom: 100px;
+  margin-top: 100px;
+    }
+</style>

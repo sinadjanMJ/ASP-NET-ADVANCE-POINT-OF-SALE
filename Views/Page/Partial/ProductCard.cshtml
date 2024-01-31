@@ -1,0 +1,95 @@
+ @* <link rel="stylesheet" href="~/lib/FontAwesome/all.min.css">
+<script src="~/lib/FontAwesome/all.min.js"></script> *@
+
+ <script src="~/lib/jquery/dist/jquery.js"></script>
+
+
+<template id="card-container">
+    <div class="card">
+        <div class="card-body">
+            
+            <h5 class="card-title">Card title</h5>
+               <hr/>
+            <h6 class="card-subtitle mb-2 ">Card subtitle</h6>
+            <h6 class="card-units mb-2 ">Card subtitle</h6>
+            <h6 class="card-stock mb-2 ">Card subtitle</h6>
+             <h6 class="card-price mb-2 ">Card subtitle</h6>
+            <h6 class="card-status mb-2 ">Card subtitle</h6>
+   <hr/>
+       <center>
+        <a class="card-link btn btn-success updateProd" data-bs-toggle="tooltip" data-bs-placement="top" title="Update">
+               <i class="fa-solid fa-pen" style="color: #ffffff;"></i>
+            </a>
+
+             <a class="btn btn-info infoProd" title="Product Information">
+                <i class="fa-solid fa-circle-info" style="color: #ffffff;"></i>
+            </a>
+            
+            <a class="btn btn-success addStock" title="Add Stocks">
+               <i class="fa-solid fa-boxes-stacked " style="color: #ffffff;"></i>
+            </a>
+            
+              <a class="btn btn-primary stockHistory" title="View added stock history">
+                <i class="fa-solid fa-clipboard"></i>
+            </a>
+
+            <a class="btn btn-danger deleteProd" title="Delete">
+                <i class="fa-solid fa-trash"></i>
+            </a>
+            <br>
+            <br>
+            <hr/>
+            <a class="btn btn-info addCart" title="Cart">
+                <i class="fa-solid fa-cart-plus"></i>
+            </a>
+            </center>
+             </div>
+    </div>
+</template>
+<div class="parent">
+        
+</div>
+<style>
+    .card-body{
+        color: #ffffff;
+    }
+    .card{
+         display: flex; 
+      display: inline-block;
+       width: 20rem; 
+       margin-right: 25px; 
+       margin-bottom: 25px;
+
+      
+       border-radius: 10px;
+      
+       background-color: transparent;
+        backdrop-filter: blur(20px);
+       -webkit-backdrop-filter: blur(25px); 
+
+    }
+   
+</style>
+@* <script>
+
+function changeBg() {
+const images = [
+'url("../1.jpg")',
+'url("../2.jpg")',
+'url("../3.jpg")',
+'url("4.jpg")',
+'url("5.jpg")',
+'url("6.jpg")',
+'url("7.jpg")',
+'url("8.jpg")'
+'url("9.jpg")',
+'url("10.jpg")',
+]
+
+const section = document.querySelector('card')
+const bg = images [Math.floor(Math.random() *
+images.length)];
+section.style.backgroundImage = bg;
+}
+setInterval(changeBg, 500)
+</script> *@

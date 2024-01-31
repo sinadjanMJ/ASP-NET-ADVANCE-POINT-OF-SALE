@@ -1,0 +1,57 @@
+ @* <link rel="stylesheet" href="~/lib/FontAwesome/all.min.css">
+<script src="~/lib/FontAwesome/all.min.js"></script> *@
+
+<div class="modal fade" id="modalUpdate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update Product</h5>
+        <button type="button" id="updateProdClose" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body createContent">
+        <form id="updateProdForm">
+            <div class="form-group">
+                <label name="" class="control-label">Category</label>
+                <select id="catSelect" name="Category" class="form-select"></select>
+            </div>
+            <div class="form-group">
+                <label name="" class="control-label">Name</label>
+                <input name="Name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label name="" class="control-label">Units</label>
+                <input name="Units" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label name="" class="control-label">Stocks</label>
+                <input type="number" name="Stock" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label name="" class="control-label">Price</label>
+                <input name="Price" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label name="Status" class="control-label">Status</label>
+                <br>
+                <input name="Status" class="form-check-input stat" type="checkbox" value="Active" id="flexCheckChecked"/>
+                <label class="form-check-label" for="flexCheckChecked">Active</label>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footers">
+        <!--<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>!-->
+        <button type="button" class="btn btn-primary" id="updateProdBtn">Update Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .modal-footers{
+     width: 100px;
+  margin-left: 135px;
+  margin-bottom: 25px;
+  }
+  #updateProdBtn{
+  width: 200px;
+ }
+</style>

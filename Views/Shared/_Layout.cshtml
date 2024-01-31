@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/SinadjanSEMI.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/product.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="~/lib/FontAwesome/all.min.css">
+    <link rel="stylesheet" href="~/css/product.css">
+    
+</head>
+<body>
+    <header>
+      
+
+<nav class="navbar">
+    <!-- LOGO -->
+    <div class="logo">CRMCPOS</div>
+
+    <!-- NAVIGATION MENU -->
+    <ul class="nav-links">
+
+      <!-- USING CHECKBOX HACK -->
+      <input type="checkbox" id="checkbox_toggle" />
+      <label for="checkbox_toggle" class="hamburger">&#9776;</label>
+
+      <!-- NAVIGATION MENUS -->
+      <div class="menu">
+
+        <li><a asp-area="" asp-controller="Page" asp-action="Product" >Add Product</a></li>
+        <li><a asp-area="" asp-controller="Page" asp-action="ProductList">Products</a></li>
+
+        @* <li><a href=@Url.ActionLink("Product","Page")>Cart <span></span><i class="fa-solid fa-cart-shopping fa-sm fa-bounce"></i></a></li> *@
+        <li><a asp-area="" asp-controller="Home" asp-action="Index">Contact</a></li>
+      </div>
+    </ul>
+  </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    @* <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - CRMCPOS - <a asp-area="" asp-controller="Page" asp-action="Product">HELLO WORLD</a>
+        </div>
+    </footer> *@
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/FontAwesome/all.min.js"></script>
+    @* <script src="~/lib/jquery/dist/jquery.js"></script> *@
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.print/1.6.0/jQuery.print.js"></script>
+    
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

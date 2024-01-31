@@ -1,0 +1,108 @@
+is_global = true
+build_property.TargetFramework = net6.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = SinadjanSEMI
+build_property.RootNamespace = SinadjanSEMI
+build_property.ProjectDir = C:\3A\mj\SinadjanSEMI\
+build_property.RazorLangVersion = 6.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\3A\mj\SinadjanSEMI
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/3A/mj/SinadjanSEMI/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/3A/mj/SinadjanSEMI/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/3A/mj/SinadjanSEMI/Views/Page/Partial/DeleteModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFnZVxQYXJ0aWFsXERlbGV0ZU1vZGFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/3A/mj/SinadjanSEMI/Views/Page/Partial/ModalAddCart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFnZVxQYXJ0aWFsXE1vZGFsQWRkQ2FydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/3A/mj/SinadjanSEMI/Views/Page/Partial/ModalCartList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFnZVxQYXJ0aWFsXE1vZGFsQ2FydExpc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/3A/mj/SinadjanSEMI/Views/Page/Partial/ModalReceipt.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFnZVxQYXJ0aWFsXE1vZGFsUmVjZWlwdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/3A/mj/SinadjanSEMI/Views/Page/Partial/ModalRecords.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFnZVxQYXJ0aWFsXE1vZGFsUmVjb3Jkcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/3A/mj/SinadjanSEMI/Views/Page/Partial/ModalRecordsDetail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFnZVxQYXJ0aWFsXE1vZGFsUmVjb3Jkc0RldGFpbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/3A/mj/SinadjanSEMI/Views/Page/Partial/ProductCard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFnZVxQYXJ0aWFsXFByb2R1Y3RDYXJkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/3A/mj/SinadjanSEMI/Views/Page/Partial/ProductModalAdd.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFnZVxQYXJ0aWFsXFByb2R1Y3RNb2RhbEFkZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/3A/mj/SinadjanSEMI/Views/Page/Partial/ProductModalAddStock.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFnZVxQYXJ0aWFsXFByb2R1Y3RNb2RhbEFkZFN0b2NrLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/3A/mj/SinadjanSEMI/Views/Page/Partial/ProductModalDetails.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFnZVxQYXJ0aWFsXFByb2R1Y3RNb2RhbERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/3A/mj/SinadjanSEMI/Views/Page/Partial/ProductModalStockHistory.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFnZVxQYXJ0aWFsXFByb2R1Y3RNb2RhbFN0b2NrSGlzdG9yeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/3A/mj/SinadjanSEMI/Views/Page/Partial/ProductModalUpdate.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFnZVxQYXJ0aWFsXFByb2R1Y3RNb2RhbFVwZGF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/3A/mj/SinadjanSEMI/Views/Page/Product.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFnZVxQcm9kdWN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/3A/mj/SinadjanSEMI/Views/Page/ProductCartDisplay/ModalAddCart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFnZVxQcm9kdWN0Q2FydERpc3BsYXlcTW9kYWxBZGRDYXJ0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/3A/mj/SinadjanSEMI/Views/Page/ProductCartDisplay/ProductCard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFnZVxQcm9kdWN0Q2FydERpc3BsYXlcUHJvZHVjdENhcmQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/3A/mj/SinadjanSEMI/Views/Page/ProductList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFnZVxQcm9kdWN0TGlzdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/3A/mj/SinadjanSEMI/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/3A/mj/SinadjanSEMI/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/3A/mj/SinadjanSEMI/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/3A/mj/SinadjanSEMI/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/3A/mj/SinadjanSEMI/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-muedm7q3gt

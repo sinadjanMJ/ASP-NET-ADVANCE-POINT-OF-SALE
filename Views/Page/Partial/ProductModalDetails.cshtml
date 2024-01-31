@@ -1,0 +1,42 @@
+ @* <link rel="stylesheet" href="~/lib/FontAwesome/all.min.css">
+<script src="~/lib/FontAwesome/all.min.js"></script> *@
+
+
+<div class="modal fade" id="modalProdInfo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Product Information</h5>
+        <button type="button" id="modalProdInfoClose" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body infoContent d-flex justify-content-center">
+        <div class="cardInfo" style="width: 18rem;">
+            <center><h4><div class="info-title" id="info-title">
+            </div></h4></center>
+            <hr/>
+            <div class="info-Category"></div>
+            <div class="info-Units"></div>
+            <div class="info-Stocks"></div>
+            <div class="info-Price"></div>
+            <div class="info-Status"></div>
+            <hr/>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button class="card-link btn btn-success updateProdInfo" id="updateProdInfoBtn" data-bs-toggle="tooltip" data-bs-placement="top" title="Update">
+            <i class="fa-solid fa-pen-to-square"></i>
+        </button>
+       
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .modal-footer{
+     width: 100px;
+  
+  }
+  #updateProdInfoBtn{
+  width: 300px;
+ }
+</style>

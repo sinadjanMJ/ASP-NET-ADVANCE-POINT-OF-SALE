@@ -1,0 +1,1281 @@
+ <link rel="stylesheet" href="~/lib/FontAwesome/all.min.css">
+ <script src="~/lib/FontAwesome/all.min.js"></script>
+ <link rel="stylesheet" href="~/css/product.css">
+
+
+ 
+@* <div><h1 style="color: #ffffff; width: 300px; display: inline-bloock; ">HASHIRA</h1></div> *@
+
+<button type="button" title="Add Product" class="btn btn-success bars" style="color: #ffffff; width: 100px; " data-bs-toggle="modal" data-bs-target="#addProdModal">
+<i class="fa-solid fa-circle-plus fa-lg "  style="color: #ffffff;"></i>
+</button>
+
+<button type="button"    title="View Cart" class="btn btn-secondary viewcart" style="color: #ffffff; width: 80px; margin-top:50px; margin-left: 1000px;" data-bs-toggle="modal" data-bs-target="#modalCart" id="cartModalOpen">
+<i class="fa-solid fa-cart-shopping fa-sm fa-bounce"></i>  <span id="carta"></span>
+</button>
+
+<button type="button" id="orderListBtn" title="Order History" class="btn btn-info" style="color: #ffffff;  margin-top:50px;" data-bs-toggle="modal" data-bs-target="#modalOrderHistory" >
+ <i class="fa-solid fa-clock-rotate-left"></i>
+</button>
+
+
+
+  <br/><br/>
+  <center>
+    <span>
+    <input style="width:500px;"type="text" name="searchbar" class="form-control" id="searchText" placeholder="Input item name"   />
+    <button  style="margin-top:-65px; margin-left:510px;" id="search-button" type="button" class="btn btn-primary">
+    <i class="fas fa-search"></i>
+  </button>
+</span>
+  </center>
+  
+  
+<br><br>
+
+
+
+
+@Html.Partial("Partial/ProductCard")
+@Html.Partial("Partial/ProductModalAdd")
+@Html.Partial("Partial/ProductModalUpdate")
+@Html.Partial("Partial/DeleteModal")
+@Html.Partial("Partial/ProductModalAddStock")
+@Html.Partial("Partial/ProductModalDetails")
+@Html.Partial("Partial/ProductModalStockHistory")
+@Html.Partial("Partial/ModalAddCart")
+@Html.Partial("Partial/ModalCartList")
+@Html.Partial("Partial/ModalRecords")
+@Html.Partial("Partial/ModalRecordsDetail")
+@Html.Partial("Partial/ModalReceipt")
+
+
+
+<div class="contents flex-row wrap justify-content"></div>
+
+
+<!-- Button trigger modal -->
+
+
+
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+<script>
+   var selectedProdId;
+    var selectedProd;
+    var selectedHistory;
+    
+    var cartPrice;
+    var cQuantity;
+    var quants;
+    var mTotal;
+    var cartArr = [];
+    var holdOrderArr = [];
+    var orderArr = [];
+
+    var sTotal;
+    var oldProductStock;
+
+    var discountVal;
+    var discountTot;
+    var orderDeduct;
+    var orderTot;
+    var paymentVal;
+    var sukli;
+
+    var orderID;
+    
+    var selectedStockId;
+    var selectedStock;
+
+    $(document).ready(function(){
+     populateIndex();
+     populateCart();
+   
+    //pagpa dislpay sa data
+    var productList = {};
+    function populateIndex()
+    {
+   
+    $.ajax("../api/newapi/getAllProduct")
+    .done(function(result)
+    {
+      
+      document.querySelector(".parent").innerHTML = "";
+      productList = result;
+        result.forEach(function(item)
+        
+        {
+        
+            var template = document.querySelector("template#card-container");
+            var parent = document.querySelector(".parent");
+            var cloned = template.content.cloneNode(true);
+         
+      
+
+            cloned.querySelector(".card .card-title").innerHTML = item.name;
+            cloned.querySelector(".card .card-subtitle").innerHTML = "Category Name : " + item.categoryName;
+            cloned.querySelector(".card .card-units").innerHTML = "Units: " + item.units;
+            cloned.querySelector(".card .card-stock").innerHTML = "Stock : " + item.stock;
+            cloned.querySelector(".card .card-price").innerHTML = "Price : ₱" + item.price;
+            cloned.querySelector(".card .card-status").innerHTML = "Status : " + item.status;
+
+            cloned.querySelector(".updateProd").setAttribute("data-prodId", item.id);
+            cloned.querySelector(".updateProd").setAttribute("data-prodName", item.name);
+
+            cloned.querySelector(".deleteProd").setAttribute("data-prodId", item.id);
+            cloned.querySelector(".infoProd").setAttribute("data-prodId", item.id);
+            cloned.querySelector(".addStock").setAttribute("data-prodId", item.id);
+            cloned.querySelector(".stockHistory").setAttribute("data-prodId", item.id);
+             cloned.querySelector(".addCart").setAttribute("data-prodId", item.id);
+
+            parent.prepend(cloned);
+       });
+    });
+    }
+
+
+    //pagpa display sa select box og data fro databasee
+     $.ajax("../api/newapi/getAllCategories")
+      .done(function(result){
+        var template = document.querySelector("template#categoryOptionTemplate");
+     
+        var parent = document.querySelectorAll("#catSelect");
+        
+        for(i = 0; i < parent.length; i++){
+          result.forEach(function (item){
+            var cloned = template.content.cloneNode(true);
+            cloned.querySelector("option").value = item.id;
+            cloned.querySelector("option").innerText= item.name;
+
+            parent[i].prepend(cloned);
+          });
+        }
+    });
+
+
+      //ee clear niya pagkahuman og eexeecutee 
+    $("#addProdClose").click(function(){
+      $("#addProdForm")[0].reset();
+    });
+
+
+    //saving into database
+    $("#saveProdBtn").click((e) =>
+    {
+      
+      var arrData = {};
+
+      var formInputs = $("#addProdForm").serializeArray(); //convert 
+      formInputs.forEach(function(item)
+      {
+        arrData[item.name] = item.value;
+      });
+
+
+      //save using ajax
+      $.ajax
+      ({
+        url: "../api/newapi/addProduct",
+        type: "POST",
+        data:
+        {
+          p : arrData
+        },
+      })
+      .done(function()
+      {
+        document.querySelector(".parent").innerHTML ="";
+        populateIndex();
+      });
+
+      $("#addProdModal").modal("toggle");
+      $("#addProdForm")[0].reset();
+    });
+
+
+
+    //pag updatee nis data
+    $(".updateProd").click(function()
+        {
+        $("#modalUpdate").modal("toggle");
+        });
+
+        $(".parent").delegate(".updateProd", "click", function (e){
+        var i = e.target.closest("a").getAttribute("data-prodId");
+        console.log("The value is " +i);
+        
+        if(i != null){
+            selectedProdId = i;
+            selectedProd = productList.find(element => element.id == i);
+
+            oFormObject = document.forms["updateProdForm"];
+            $("#modalUpdate").modal("toggle");
+            initForm(oFormObject, selectedProd);
+        }
+        });
+
+
+
+        function initForm(form, data){
+
+        Object.getOwnPropertyNames(data).forEach(function(item){
+
+          var currentElem = form.elements[item.charAt(0).toUpperCase() + item.slice(1)];
+
+          if( currentElem == null ){return;}
+
+          if(currentElem.tagName == "SELECT"){
+            var selectChildren = Array.from(currentElem.children);
+            var matchedOpt = selectChildren.find(opt => opt.value == selectedProd.category);
+            if(matchedOpt){
+              matchedOpt.selected = true;
+            }
+          }else{
+            form.elements[item.charAt(0).toUpperCase() + item.slice(1)].setAttribute("value",data[item]); 
+          }
+
+        if(data.status == "Active")
+        {
+            $('.stat').prop('checked', true);
+        }
+        
+        else
+          {
+            $('.stat').prop('checked', false);
+          }
+        });
+        }
+
+
+
+
+
+  $("#updateProdBtn").click((e) =>
+    {
+      var arrData = {};
+
+      var formInputs = $("#updateProdForm").serializeArray();
+      formInputs.forEach(function(item)
+      {
+        arrData[item.name] = item.value;
+      });
+
+      //attempts to give value to the data
+      arrData.id = selectedProdId;
+
+
+      //save using ajax
+      $.ajax
+      ({
+        url: "../api/newapi/updateProduct",
+        type: "POST",
+        data:
+        {
+          p : arrData
+        },
+      })
+      .done(function()
+      {
+         document.querySelector(".parent").innerHTML ="";
+     populateIndex();
+      });
+
+      $("#modalUpdate").modal("toggle");
+      $("#updateProdForm")[0].reset();
+    });
+
+    $("#updateProdClose").click(function(){
+      $("#updateProdForm")[0].reset();
+    });
+
+
+
+    $(".parent").delegate(".deleteProd", "click", function(e){
+      var i = e.target.closest("a").getAttribute("data-prodId");
+      console.log(i);
+
+      if(i != null)
+      {
+        selectedProdId = i;
+        $("#modalDelete").modal("toggle");
+      
+      }
+    });
+
+
+    //CONFIRM DELETE CLICKED
+    $("#deleteProdBtn").click((e) => {
+      //AJAX DELETE
+      $.ajax
+      ({
+        url: "../api/newapi/deleteProduct",
+        type: "POST",
+        data:
+        {
+          id : selectedProdId
+        },
+      })
+      .done(function()
+      {
+    document.querySelector(".parent").innerHTML ="";
+     populateIndex();
+      });
+      $("#modalDelete").modal("toggle");
+    });
+    
+
+
+    //PRODUCT INFORMATION MODAL
+    $(".parent").delegate(".infoProd", "click", function(e){
+      var i = e.target.closest("a").getAttribute("data-prodId");
+      console.log(i);
+
+      if(i != null)
+      {
+        selectedProdId = i;
+        selectedProd = productList.find(element => element.id == i);
+        $("#modalProdInfo").modal("toggle");
+
+            $(".cardInfo .info-title").html(selectedProd.name);
+            $(".cardInfo .info-Category").html('Category Name : ' + selectedProd.categoryName);
+            $(".cardInfo .info-Units").html('Units : ' + selectedProd.units);
+            $(".cardInfo .info-Stocks").html('Stocks : ' + selectedProd.stock);
+            $(".cardInfo .info-Price").html('Price ₱: ' + selectedProd.price);
+            $(".cardInfo .info-Status").html('Status : ' + selectedProd.status);
+
+
+        //UPDATE PROD INFO CLICKED
+        $("#updateProdInfoBtn").click((e) => {
+          $("#modalProdInfo").modal("toggle");
+
+          oFormObject = document.forms["updateProdForm"];
+          $("#modalUpdate").modal("toggle");
+          initForm(oFormObject, selectedProd);
+        });
+      }
+    });
+
+
+    
+   
+//history display data
+
+    $(".parent").delegate(".stockHistory","click", function(e){
+      var i = e.target.closest("a").getAttribute("data-prodId");
+
+      if(i != null)
+      {
+        selectedProdId = i;
+        selectedProd = productList.find(element => element.id == i);
+        $("#modalStockHistory").modal("toggle");
+
+        $(".cardInfo .info-title").html(" " +  selectedProd.name);
+        $(".cardInfo .info-Stocks").html("Stocks: " +  selectedProd.stock);
+
+        $.ajax("../api/newapi/viewStockHistory")
+        .done(function(result)
+        {
+          $.ajax(
+            {
+              url: "../api/newapi/viewStockHistory",
+              type: "POST",
+              data:
+              {
+                id : selectedProdId
+              },
+            })
+          .done(function(result)
+          {
+            if(result.length == 0)
+            {
+              var template = document.querySelector("template#card-viewstock");
+              var parent = document.querySelector(".parentHistory");
+              var cloned = template.content.cloneNode(true);
+
+              cloned.querySelector(".stockHis").innerHTML = "NO ADDED STOCK FOUND <br>";
+
+              parent.prepend(cloned);
+            }
+            else
+            {
+              result.forEach(function(item)
+              {
+                var template = document.querySelector("template#card-viewstock");
+                var parent = document.querySelector(".parentHistory")
+                var cloned = template.content.cloneNode(true);
+
+                cloned.querySelector(".stockHis").innerHTML = "Added" +"&nbsp;&nbsp;" + item.addedStock +"stock"+ " on " + item.date + "<hr>";
+
+                parent.prepend(cloned);
+              });
+            }
+          });
+
+        });
+      }
+    });
+
+      //close history
+      $("#modalStockHistoryClose").click(function(){
+        $(".stockContent").find("div.stockHis").text("");
+      }); 
+
+
+
+      //add stock
+    $(".parent").delegate(".addStock", "click", function(e)
+    {
+      var i = e.target.closest("a").getAttribute("data-prodId");
+      console.log(i);
+      
+      var cStock;
+      var inputStock;
+
+      if(i != null)
+      {
+        selectedProdId = i;
+        selectedProd = productList.find(element => element.id == i);
+
+        $("#modalStock").modal("toggle");
+
+            $(".cardInfo .info-title").html('Product Name: ' + selectedProd.name);
+            $(".cardInfo .info-Stocks").html('Current Stocks : ' + selectedProd.stock);
+
+
+        //GET THE DATA FROM MODAL
+        $("#addStockBtn").click((e) => {
+    
+          cStock = selectedProd.stock;
+          inputtedStock = $("#inputStock").val();
+
+          if(inputtedStock <= 0)
+          {
+            //$("#modalStock").modal("toggle");
+            console.log("Error try adding positive integers");
+          }
+          else
+          {
+            var date = new Date(Date.now());
+            var date1 = date.toLocaleString();
+            //AJAX ADD STOCK
+            $.ajax
+            ({
+              url: "../api/newapi/addStockProduct",
+              type: "POST",
+              data:
+              {
+                p : selectedProd,
+                iStock : inputtedStock,
+                date : date1.toString()
+              },
+            })
+            .done(function()
+            {
+               document.querySelector(".parent").innerHTML ="";
+               populateIndex();
+               
+            });
+
+            $("#modalStock").modal("toggle");
+            $("#modalStock")[0].reset(); //para dili oo duplicate inig pa display
+          }
+
+        });
+      }
+    });//end of this function
+
+
+
+   $(".parent").delegate(".addCart", "click", function(e){
+      var i = e.target.closest("a").getAttribute("data-prodId");
+      //console.log(i);
+
+      if(i != null)
+      {
+
+        selectedProdId = i;
+        selectedProd = productList.find(element => element.id == i);
+
+        $("#modalAddCart").modal("toggle");
+
+          $(".cardInfo .info-title").html('<center>' + selectedProd.name + '</center><br>');
+          $(".cardInfo .info-Stocks").html('Current Stocks : ' + selectedProd.stock);
+          $(".cardInfo .info-Price").html('Price : ' + selectedProd.price);
+
+          cQuantity = selectedProd.stock;
+          cartPrice = selectedProd.price;
+        
+        //  var quan = $("#addCart").val();
+
+        // $(".cardInfo .info-mockTotal").html('Mock Total : ₱' + quan * cartPrice);
+      }
+    });//end of this function
+
+//DETECTING INPUT FROM ADD CART FORM
+
+     $("#addCart").on("input", function(){
+      //console.log($(this).val());
+      quants = $(this).val();   //take note of this
+    
+
+      if(cQuantity >= quants)
+      {
+        $(".cardInfo .info-mockTotal").html('Mock Total : ₱' + quants * cartPrice);
+      }
+      else
+      {
+        document.getElementById("addCart").value = cQuantity;
+        quants = $(this).val(); 
+        $(".cardInfo .info-mockTotal").html('Mock Total : ₱' + quants * cartPrice);
+        //alert("Must not go over the stocks available");
+      }
+
+      mTotal = quants * cartPrice;
+    });//end of this function
+
+
+    //CLICKING CLOSE BUTTON OF ADD TO CART MODAL
+     $("#modalAddCartClose").click(function(){
+      $("#addCartForm")[0].reset();
+      cartPrice = 0;
+      quants = 0;
+      //console.log(cartPrice);
+      $(".cardInfo .info-mockTotal").html('Mock Total : ₱0');
+    });//end of this function
+
+
+    
+
+$("#addCartBtn").click((e) => {
+      //ADD TO CART
+      if(quants <= 0 || quants == null)
+      {
+        alert("Invalid");
+      }
+      else
+      {
+        var testCart = 
+        {
+          prodID : selectedProd.id,
+          cQuantity : quants,
+          cMockTotal : mTotal,
+          cMockStock : selectedProd.stock - quants
+        }
+
+        var found = cartArr.find(element => element.id == testCart.prodID);
+        if(found != null)
+        {
+          //API UPDATE
+          if(parseInt(found.mockStock) < parseInt(testCart.cQuantity))
+          {
+            alert("You already have a total of " + found.quantity + " quantity of this product. Automatically updated to the maximum purchase limit.");
+
+            found.quantity = parseInt(cQuantity);
+            found.mTotal = parseInt(cQuantity) * parseInt(found.price);
+            found.mockStock = parseInt(cQuantity) - found.quantity;
+
+            var resHold = 
+            {
+              prodID : found.id,
+              cQuantity : found.quantity,
+              cMockTotal : found.mTotal,
+              cMockStock : found.mockStock,
+              cartID : found.cartID 
+            }
+
+            $.ajax
+            ({
+              url: "../api/newapi/updateCart",
+              type: "POST",
+              data:
+              {
+                ct : resHold
+              },
+            })
+            .done(function(item)
+            {
+              //cartArr.push(item);
+              populateCart();
+            });
+          }
+          else
+          {
+            var newQuantVal = 0;
+            var newMockTotal = 0;
+            var newMockStock = 0;
+
+            newQuantVal = parseInt(found.quantity) + parseInt(testCart.cQuantity);
+            found.quantity = newQuantVal;
+
+            newMockTotal = parseInt(newQuantVal) * parseInt(found.price);
+            found.mTotal = newMockTotal;
+
+            newMockStock = parseInt(selectedProd.stock) - parseInt(newQuantVal);
+            found.mockStock = newMockStock;
+
+            var resHold = 
+            {
+              prodID : found.id,
+              CQuantity : found.quantity,
+              CMockTotal : found.mTotal,
+              CMockStock : found.mockStock,
+              cartID : found.cartID 
+            }
+
+            $.ajax
+            ({
+              url: "../api/newapi/updateCart",
+              type: "POST",
+              data:
+              {
+                ct : resHold
+              },
+            })
+            .done(function(item)
+            {
+              //cartArr.push(item);
+              populateCart();
+            });
+          }
+        }
+        else
+        {
+          $.ajax
+            ({
+              url: "../api/newapi/addCart",
+              type: "POST",
+              data:
+              {
+                ct : testCart
+              },
+            })
+            .done(function(item)
+            {
+              populateCart();
+            });
+        }
+      }
+
+      $("#addCartForm")[0].reset();
+      cartPrice = 0;
+      quants = 0;
+      $(".cardInfo .info-mockTotal").html('Mock Total : ₱0');
+    }); //end of this function
+
+
+   
+  $("#cartModalOpen").click(function(){
+      populateCartList();
+      calculateDiscount();
+      calculateChange();
+    });// end of this function
+    
+  function populateCartList()
+    {
+      document.querySelector(".parentCart").innerHTML = "";
+      sTotal = 0;
+      
+
+      //populateIndex();
+      cartArr.forEach(function(item){
+          var template = document.querySelector("template#card-container-cart");
+          var parent = document.querySelector(".parentCart");
+          var cloned = template.content.cloneNode(true);
+            //var p = document.createElement("p").innerText = item.name;
+            //$("body").append(p + "<br>");
+
+          cloned.querySelector(".card .card-title").innerHTML = item.name;
+          cloned.querySelector(".card .card-body").innerHTML = "Units : " + item.units
+          + "<br>" + "Price : ₱" + item.price
+          ;
+          cloned.querySelector(".card .card-stock").innerHTML = item.quantity;
+          cloned.querySelector(".card .card-mockTotal").innerHTML = "Product Total : ₱" + item.mTotal;
+
+          sTotal = sTotal + parseInt(item.mTotal);
+          //cloned.querySelector(".subTotal").innerHTML = "Sub Total : ₱" + item.mTotal;
+          $(".infoCart .subTotal").html('Sub Total : ₱' + sTotal);
+
+          cloned.querySelector(".stockMinus").setAttribute("data-prodId", item.id);
+          cloned.querySelector(".stockPlus").setAttribute("data-prodId", item.id);
+          cloned.querySelector(".deleteCart").setAttribute("data-prodId", item.id);
+
+          parent.prepend(cloned);
+      });
+
+        if(cartArr.length <= 0)
+        {
+          $(".infoCart .subTotal").html('No cart item');
+          $("#inputDiscount").hide();
+          $("#inputPayment").hide();
+          $(".labelCart").hide();
+
+          document.getElementById('inputDiscount').value = null;
+          document.getElementById('inputPayment').value = null;
+
+          document.getElementById("checkoutBtn").disabled = true;
+        }
+        else
+        {
+          $("#inputDiscount").show();
+          $("#inputPayment").show();
+          $(".labelCart").show();
+        }
+    }//end of this function
+
+     //MAG ADD TAG STOCKS MGA HIGALA
+    $(".parentCart").delegate(".stockPlus", "click", function(e){
+      var i = e.target.closest("a").getAttribute("data-prodId");
+      if(i != null)
+      {
+        selectedStockId = i;
+        selectedStock = cartArr.find(element => element.id == i);
+
+        var stock = selectedStock.quantity;
+        var price = selectedStock.price;
+        var cartStock = selectedStock.stock;
+        if(selectedStock.stock >= parseInt(stock) + 1)
+        {
+          var newQuantVal = parseInt(stock) + 1;
+          var newMockTotal = parseInt(newQuantVal) * parseInt(price);
+          var newMockStock = parseInt(cartStock) - parseInt(newQuantVal);
+
+          selectedStock.quantity = parseInt(newQuantVal);
+          selectedStock.mTotal = parseInt(newMockTotal);
+          selectedStock.mockStock = parseInt(newMockStock);
+
+          var resHold = 
+          {
+            prodID : selectedStock.id,
+            CQuantity : selectedStock.quantity,
+            CMockTotal : selectedStock.mTotal,
+            CMockStock : selectedStock.mockStock,
+            cartID : selectedStock.cartID 
+          }
+
+          $.ajax
+          ({
+            url: "../api/newapi/updateCart",
+            type: "POST",
+            data:
+            {
+              ct : resHold
+            },
+          })
+          .done(function(item)
+          {
+            populateCart();
+           
+          });
+
+          populateCartList();
+          calculateDiscount();
+          calculateChange();
+         
+        }
+      }
+    });
+
+    //MAG MINUS TAG STOCKS
+    $(".parentCart").delegate(".stockMinus", "click", function(e){
+      var i = e.target.closest("a").getAttribute("data-prodId");
+      if(i != null)
+      {
+        selectedStockId = i;
+        selectedStock = cartArr.find(element => element.id == i);
+
+        var stock = selectedStock.quantity;
+        var price = selectedStock.price;
+        var cartStock = selectedStock.stock;
+        if(parseInt(stock) - 1 > 0)
+        {
+          var newQuantVal = parseInt(stock) - 1;
+          var newMockTotal = parseInt(newQuantVal) * parseInt(price);
+          var newMockStock = parseInt(cartStock) - parseInt(newQuantVal);
+
+          selectedStock.quantity = parseInt(newQuantVal);
+          selectedStock.mTotal = parseInt(newMockTotal);
+          selectedStock.mockStock = parseInt(newMockStock);
+
+          var resHold = 
+          {
+            prodID : selectedStock.id,
+            CQuantity : selectedStock.quantity,
+            CMockTotal : selectedStock.mTotal,
+            CMockStock : selectedStock.mockStock,
+            cartID : selectedStock.cartID
+          }
+
+          $.ajax
+          ({
+            url: "../api/newapi/updateCart",
+            type: "POST",
+            data:
+            {
+              ct : resHold
+            },
+          })
+          .done(function(item)
+          {
+            populateCart();
+            
+          });
+
+          populateCartList();
+          calculateDiscount();
+          calculateChange();
+        }
+      }
+    });
+
+    //MAG DELETE TAG GI CART BORDS
+    $(".parentCart").delegate(".deleteCart", "click", function(e){
+      var i = e.target.closest("a").getAttribute("data-prodId");
+      if(i != null)
+      {
+        selectedStockId = i;
+        selectedStock = cartArr.find(element => element.id == i);
+
+        const index = cartArr.indexOf(selectedStock);
+
+        var x = cartArr.splice(index, 1);
+
+        //delete cartArr[index];
+        //cartArr.slice(index);
+        if(cartArr.length <= 0)
+        {
+          $(".infoCart .subTotal").html('No cart item');
+          sTotal = null;
+          discountTot = null;
+          orderTot = null;
+          paymentVal = null;
+          sukli = null;
+          $(".infoCart .deduction").html("");
+          $(".infoCart .orderTotal").html("");
+          $(".infoCart .sukli").html("");
+
+          document.getElementById('inputDiscount').value = null;
+          document.getElementById('inputPayment').value = null;
+          document.getElementById("checkoutBtn").disabled = true;
+        }
+
+        //get the cartid value from cart to delete
+        var cartskie = selectedStock.cartID;
+        $.ajax
+        ({
+          url: "../api/newapi/deleteCart",
+          type: "POST",
+          data:
+          {
+            cartID : cartskie
+          },
+        })
+        .done(function(item)
+        {
+          populateCart();
+        });
+
+        populateCartList();
+        calculateDiscount();
+        calculateChange();
+      }
+    });
+
+    //CALCULATE DISCOUNT
+    $("#inputDiscount").on("input", function(){
+      calculateDiscount();
+    });
+
+    function calculateDiscount()
+    {
+      //discountVal = $(this).val();
+      discountVal = document.getElementById("inputDiscount").value;
+
+      console.log(discountVal+"mao ni");
+
+      if(parseFloat(discountVal).toFixed(2) >= 0 && parseFloat(discountVal).toFixed(2) <= 100)
+      {
+        //It means it won't go over 100% discount
+      }
+      else if(parseFloat(discountVal).toFixed(2) >= 100)
+      {
+        //Force the discount value to 100
+        discountVal = parseFloat(100);
+        document.getElementById('inputDiscount').value = discountVal;
+      }
+      else if(parseFloat(discountVal).toFixed(2) <= 0)
+      {
+        discountVal = parseFloat(0);
+        document.getElementById('inputDiscount').value = discountVal;
+      }
+      else if(parseFloat(discountVal).toFixed(2) == null || parseFloat(discountVal).toFixed(2) == '' )
+      {
+        discountVal = parseFloat(0);
+      }
+
+      if(cartArr.length <= 0)
+      {
+        $(".infoCart .deduction").html("");
+        $(".infoCart .orderTotal").html("");
+        $(".infoCart .sukli").html("");
+      }
+      else
+      {
+        discountTot = (sTotal * discountVal) / 100;
+       
+        orderTot = parseFloat(sTotal).toFixed(2) - parseFloat(discountTot).toFixed(2);
+        $(".infoCart .deduction").html("Deduction : ₱" + discountTot.toFixed(2));
+        $(".infoCart .orderTotal").html("Final Total : ₱" + orderTot.toFixed(2));
+      }
+      calculateChange();
+     console.log(discountVal+"wala pa na pislit ang checkout");
+   
+ 
+
+    }
+
+   
+
+    //CALCULATE CHANGE
+    $("#inputPayment").on("input", function(){
+      calculateDiscount();
+      calculateChange();
+        @* console.log(disc+"wala pa na pislit ang checkout"); *@
+    });
+
+    function calculateChange()
+    {
+      paymentVal = document.getElementById("inputPayment").value;
+      
+      if(paymentVal != null)
+      {
+        sukli = paymentVal - orderTot;
+        if(cartArr.length <= 0)
+        {
+          sukli = -1;
+          $(".infoCart .sukli").html("");
+        }
+        else
+        {
+          $(".infoCart .sukli").html("Change : ₱" + sukli.toFixed(2));
+        }
+
+        if(sukli >= 0)
+        {
+          var element = document.getElementById("sukliID");
+          document.getElementById("checkoutBtn").disabled = false;
+        }
+        else
+        {
+          var element = document.getElementById("sukliID");
+          document.getElementById("checkoutBtn").disabled = true;
+        }
+      }
+      else
+      {
+        document.getElementById("checkoutBtn").disabled = true;
+      }
+       @* console.log(disc+"wala pa na pislit ang checkout"); *@
+    }
+
+  
+    //REFRESH CART
+    function populateCart()
+    {
+      $.ajax("../api/newapi/popCart")
+      .done(function(item)
+      {
+        cartArr = item;
+      console.log(item);
+      $("#carta").html("("+cartArr.length+")");
+      
+       
+      });
+  
+    }
+
+
+    $("#checkoutBtn").click(function(){
+   
+      saveOrder();
+    });
+
+    //SAVE THE ORDERS TO DATABASE
+    function saveOrder()
+    {
+      orderID = 0;
+      var date = new Date(Date.now());
+      var date1 = date.toLocaleString();
+
+      
+
+      if(discountVal == null || discountVal == "")
+      {
+        discountVal = 0;
+      }
+      //insert the data first to array
+      var orderHolder = 
+      {
+        subTotal : sTotal,
+        discount : discountVal,
+        deduction : discountTot,
+        totalAmount : orderTot,
+        paidAmount : paymentVal,
+        orchange : sukli,
+        datepurchased : date1 
+      }
+
+      $.ajax
+        ({
+          url: "../api/newapi/savetoOrder",
+          type: "POST",
+          data:
+          {
+            ord : orderHolder
+          },
+        })
+        .done(function(item)
+        {
+          orderID = item;
+          saveOrderDetails();
+      });
+    }
+
+    function saveOrderDetails()
+    {
+      //get the value of cart arr and insert only the needed items
+      cartArr.forEach(function(item){
+        holdOrderArr = 
+        {
+          OrderId : orderID ,
+          productID : item.id,
+          quantity : item.quantity ,
+          productTotal : item.mTotal
+        }
+
+        var nStock = item.mockStock;
+
+        //save this to orderdetails and also update the new stock
+        $.ajax
+        ({
+          url: "../api/newapi/savetoOrderDetails",
+          type: "POST",
+          data:
+          {
+            ordtls : holdOrderArr,
+            mStock : nStock
+          },
+        })
+        .done(function(item)
+        {
+      
+          clearCart();
+          populateReceipt(orderID);
+          populateIndex();
+          document.querySelector(".parent").innerHTML = "";
+        });
+      });
+    }
+
+    function clearCart()
+    {
+      $.ajax("../api/newapi/clearCart")
+      .done(function(item)
+      {
+       
+        populateCart();
+        
+      });
+    }
+
+ $("#orderListBtn").click(function(){
+      getAllOrderList();
+    });
+
+
+function getAllOrderList()
+{
+  $('#orderHistory').DataTable().destroy();
+  if (!$.fn.DataTable.isDataTable('#orderHistory')) {
+    // Initialize DataTable
+    $('#orderHistory').DataTable({
+      ajax: {
+        url: '../api/newapi/getAllOrders', // API endpoint to retrieve orders
+        dataSrc: ''
+      },
+      columns:
+      [
+        { data: 'orderId'},
+        { data: "subTotal"},
+        { data: "discount"},
+        { data: "deduction"},
+        { data: "totalAmount"},
+        { data: "paidAmount"},
+        { data: "orchange"},
+        { data: "datePurchased"},
+        { 
+          data: 'orderId',
+          render: function (data, type, row) {
+            //return '<a href="/orders/' + data + '">' + data + '</a>';
+            return btnOrderDetails(data);
+          }
+        },
+      ]
+  });
+  }
+}
+
+function btnOrderDetails(orderId)
+{
+  //return '<button class="btn btn-warning" onclick="hello(orderId)">Details</button>'; // Example: Create a button with orderId
+  return "<a class='btn btn-primary orderDet' data-orderId=" + orderId + "><i class='fa-solid fa-circle-info' style='color: #ffffff;'></i></a>"
+}
+
+  $("tbody").delegate(".orderDet", "click", function(e){
+    var i = e.target.closest("a").getAttribute("data-orderId");
+    if(i != null)
+    {
+      showOrderDetails(i);
+    }
+  });
+
+function showOrderDetails(orderId)
+{
+  $("#modalOrderHistory").modal("toggle");
+  $("#modalOrderHistoryDetail").modal("toggle");
+  $('#orderHistoryDetail').DataTable().destroy();
+  if (!$.fn.DataTable.isDataTable('#orderHistoryDetail')) {
+    // Initialize DataTable
+    $('#orderHistoryDetail').DataTable({
+      ajax: {
+        url: '../api/newapi/getAllOrderDetails', // API endpoint to retrieve orders
+        data:
+        {
+          id : orderId,
+        },
+        dataSrc: ''
+      },
+      columns:
+      [
+        { data: 'orderId'},
+        { data: 'productName'},
+        { data: 'quantity'},
+        { data: 'productTotal'},
+      ]
+  });
+  }
+}
+
+$("#modalOrderHistoryDetailClose").click(function(){
+      $("#modalOrderHistoryDetail").modal("toggle");
+    });
+
+
+
+      $('#searchText').on("input", function(){
+      var searchedItem = $(this).val();
+
+      //console.log(searchedItem);
+
+      var search = productList.filter(element => element.name.toLowerCase().includes(searchedItem.toLowerCase()) || element.name.toUpperCase().includes(searchedItem.toUpperCase()));
+      //console.log(sear);
+      
+        document.querySelector(".parent").innerHTML = "";
+        search.forEach(function(item)
+        {
+            var template = document.querySelector("template#card-container");
+            var parent = document.querySelector(".parent");
+            var cloned = template.content.cloneNode(true);
+          
+           cloned.querySelector(".card .card-title").innerHTML = item.name;
+            cloned.querySelector(".card .card-subtitle").innerHTML = "Category Name : " + item.categoryName;
+            cloned.querySelector(".card .card-units").innerHTML = "Units: " + item.units;
+            cloned.querySelector(".card .card-stock").innerHTML = "Stock : " + item.stock;
+            cloned.querySelector(".card .card-price").innerHTML = "Price : ₱" + item.price;
+            cloned.querySelector(".card .card-status").innerHTML = "Status : " + item.status;
+
+            cloned.querySelector(".updateProd").setAttribute("data-prodId", item.id);
+            cloned.querySelector(".updateProd").setAttribute("data-prodName", item.name);
+
+            cloned.querySelector(".deleteProd").setAttribute("data-prodId", item.id);
+            cloned.querySelector(".infoProd").setAttribute("data-prodId", item.id);
+            cloned.querySelector(".addStock").setAttribute("data-prodId", item.id);
+            cloned.querySelector(".stockHistory").setAttribute("data-prodId", item.id);
+             cloned.querySelector(".addCart").setAttribute("data-prodId", item.id);
+
+            parent.prepend(cloned);
+        });
+        
+    });
+
+
+
+ function populateReceipt(orderID)
+      {
+        //populate data here
+        
+        document.querySelector(".parentReceipt").innerHTML = "";
+       
+
+     
+
+        $.ajax
+        ({
+          url: "../api/newapi/getAllOrderDetails",
+          type: "POST",
+          data:
+          {
+            id : orderID
+          },
+        })
+        .done(function(item)
+        {
+          @* console.log(item); *@
+
+          item.forEach(function(receipt){
+          var template = document.querySelector("template#prodReceipt");
+          var parent = document.querySelector(".parentReceipt");
+          var cloned = template.content.cloneNode(true);
+
+            cloned.querySelector(".receiptPName").innerHTML = receipt.productName;
+            cloned.querySelector(".receiptPCat").innerHTML = receipt.prodUnit + "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;"
+            + "₱"+receipt.prodPrice + "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;"
+            + "₱"+ receipt.productTotal
+            ;
+
+            cloned.querySelector(".receiptPQuantity").innerHTML = receipt.quantity + " item(s)";
+
+            document.querySelector(".oID").innerHTML ="Order ID: " +  receipt.orderId;
+           document.querySelector(".DATE").innerHTML ="Date Purchased: " +  receipt.adlaw;
+
+            document.querySelector(".receiptSubTotal").innerHTML = "Sub Total : &emsp;₱ " + receipt.subTotal;
+            document.querySelector(".receiptDiscount").innerHTML = "Discount  : &emsp;&nbsp-₱" + receipt.deduction;
+
+            document.querySelector(".receiptTotal").innerHTML = "Order Total : &emsp;&emsp;₱ " + receipt.totalAmount;
+            document.querySelector(".receiptCash").innerHTML = "Cash         : &emsp;&emsp;&emsp;₱ " + receipt.paidAmount;
+            document.querySelector(".receiptChange").innerHTML = "Change : &emsp;&emsp;₱ " + receipt.sukli;
+
+            document.querySelector(".receiptGesture").innerHTML = "!!!!!!!!!!!THANK YOU FOR THE SOPPING ENJOY YOUR DAY AND COMEBACK AGAIN!!!!!!!!!!!";
+            parent.prepend(cloned);
+            });
+          
+          printResult();
+        });
+      }
+
+      function printResult()
+      {
+        var DocumentContainer = document.getElementById('receiptContent');
+        var WindowObject = window.open('', "PrintWindow", "toolbars=no,scrollbars=yes,status=no,resizable=yes");
+        WindowObject.document.writeln(DocumentContainer.innerHTML);
+        WindowObject.document.close();
+        WindowObject.focus();
+        WindowObject.print();
+        WindowObject.close();
+      }
+
+});//dont touch it msisira buhay
+    
+
+</script>

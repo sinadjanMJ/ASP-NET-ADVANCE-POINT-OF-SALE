@@ -1,0 +1,51 @@
+<div class="modal fade" id="modalAddCart" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add to cart</h5>
+        <button type="button" id="modalAddCartClose" class="btn-close btn-light" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body stockContent d-flex justify-content-center">
+       <div>
+            <div class="cardInfo" style="width: 18rem;">
+            <h4><div class="info-title" id="info-title">
+            </div></h4>
+            <strong>
+                <div class="info-Stocks"></div>
+                <div class="info-Price"></div>
+            </strong>
+            <hr/>
+            <form id="addCartForm">
+
+            <div class="form-group">
+                <label name="" class="control-label">Quantity</label>
+                <input  type="number" name="Stock" id="addCart" class="form-control"/>
+            </div>
+            </form>
+            <hr/>
+            <strong>
+                <div class="info-mockTotal">Mock Total : ₱ 0</div>
+               
+            </strong>
+            </div>
+       </div>
+      </div>
+      <div class="modal-footer">
+        
+        <button type="button" class="btn btn-success btnadd" data-bs-dismiss="modal" id="addCartBtn">
+          <i class="fa-solid fa-cart-plus fa-lg"></i>
+          </button>
+       
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .btnadd{
+    margin-left: 100px;
+  }
+  input{
+    color: black;
+  }
+</style>

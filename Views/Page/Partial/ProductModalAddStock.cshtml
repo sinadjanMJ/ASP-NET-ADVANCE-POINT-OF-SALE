@@ -1,0 +1,35 @@
+ @* <link rel="stylesheet" href="~/lib/FontAwesome/all.min.css">
+<script src="~/lib/FontAwesome/all.min.js"></script> *@
+
+
+<div class="modal fade" id="modalStock" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Stock</h5>
+        <button type="button" id="modalStockClose" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body stockContent d-flex justify-content-center">
+       <div>
+            <div class="cardInfo" style="width: 18rem;">
+            <h5><div class="info-title" id="info-title">
+            </div>
+            <div class="info-Stocks"></div></h5>
+           
+            <form id="addStockForm">
+            <div class="form-group">
+                <label name="" class="control-label">Stocks</label>
+                <input type="number" name="Stock" id="inputStock" class="form-control"/>
+            </div>
+            </form>
+           
+      </div>
+       </div>
+      </div>
+      <div class="modal-footer">
+        <!--<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>!-->
+        <button type="button" class="btn btn-primary" id="addStockBtn">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>

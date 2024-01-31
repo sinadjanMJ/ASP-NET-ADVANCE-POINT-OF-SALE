@@ -1,0 +1,80 @@
+<div class="modal fade" id="modalCart" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Cart List</h5>
+        <button type="button" id="modalCartClose" class="btn-close btn-light" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body infoCart d-flex justify-content-center">
+        <template id="card-container-cart">
+            <div class="card cardsdd" style="width: 18rem;">
+            <center><h4><div class="card-title" id="kani">
+            </div></h4></center>
+            <hr/>
+            <strong>
+                <center>
+                <div class="card-body" id="car"></div>
+                <a class="btn stockMinus" id="stockMinus">-</a>
+                <a class="card-stock text-decoration-none"></a>
+                </a>
+                <a class="btn stockPlus" id="stockPlus">+</a> <!--For stock minus and plus : make this button bigger.!-->
+                </center>
+            </strong>
+               
+            <strong>
+          
+              <div class="card-mockTotal"></div>
+            </strong>
+            <hr/>
+            <center>
+                <a class="btn btn-danger deleteCart" title="Delete">
+                   <i class="fa-solid fa-trash"></i>
+                </a>
+                </center>
+
+            </div>
+        </template>
+        <div class="parentCart"></div>
+        <br>
+        <div class = "vertical"></div>
+        <div>
+            <div class="x subTotal"></div>
+            <br/>
+            <label name="" class="control-label labelCart">Discount</label>
+            <input type="number" id="inputDiscount" class="form-control"/>
+
+            <label name="" class="control-label labelCart">Payment</label>
+            <input type="number" id="inputPayment" class="form-control"/>
+
+            <br/>
+            <div class="x deduction"></div>
+            <div class="x orderTotal"></div>
+            <div class="x sukli" id="sukliID"></div>
+        </div>
+        <br>
+      </div>
+      <div class="modal-footer">
+            <button class="card-link btn btn-success checkoutBtn" id="checkoutBtn" data-bs-dismiss="modal" data-bs-toggle="tooltip" data-bs-placement="top" title="Checkout">
+            Checkout
+            </button>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+#modalCart{
+  background-color: transparent;
+        backdrop-filter: blur(20px);
+       -webkit-backdrop-filter: blur(25px); 
+
+}
+.card-mockTotal{
+  margin-left: 50px;
+}
+.deleteCart{
+margin-bottom: 20px;
+}
+#car{
+  color: black;
+}
+</style>
